@@ -1,29 +1,84 @@
-/* 기본 스타일 (라이트 모드) */
+/* 기본 스타일 (라이트모드) */
 body {
-    background-color: #fff;
-    color: #000;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
 }
 
-.sidebar {
-    background-color: #f0f0f0;
+/* 다크모드 스타일 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    /* 사이드바 */
+    .sidebar {
+        background-color: #1f1f1f;
+        color: #ffffff;
+    }
+
+    /* 버튼 스타일 */
+    .button {
+        background-color: #333333;
+        color: #ffffff;
+        border: 1px solid #555555;
+    }
+    
+    /* 제목 */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff;
+    }
+
+    /* 입력 필드 */
+    input, select, textarea {
+        background-color: #333333;
+        color: #ffffff;
+        border: 1px solid #555555;
+    }
+
+    /* 차트/그래프 */
+    .chart {
+        background-color: #222222;
+        color: #ffffff;
+    }
+
+    /* 카드 */
+    .card {
+        background-color: #333333;
+        color: #ffffff;
+        border: 1px solid #555555;
+    }
+
+    /* 텍스트 강조 */
+    .highlight {
+        color: #ff9800;
+    }
 }
 
-.button {
-    background-color: #4CAF50;
-    color: white;
-}
+/* 라이트모드에 대한 추가 스타일 (필요에 따라) */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: #ffffff;
+        color: #000000;
+    }
 
-/* 다크 모드 스타일 */
-body.dark-mode {
-    background-color: #2c2c2c;
-    color: #fff;
-}
+    .sidebar {
+        background-color: #f4f4f4;
+        color: #000000;
+    }
 
-.sidebar.dark-mode {
-    background-color: #333;
-}
+    .button {
+        background-color: #e0e0e0;
+        color: #000000;
+        border: 1px solid #cccccc;
+    }
 
-.button.dark-mode {
-    background-color: #555;
-    color: white;
+    .card {
+        background-color: #f9f9f9;
+        color: #000000;
+        border: 1px solid #ddd;
+    }
+
+    /* 더 필요한 부분을 추가 */
 }
