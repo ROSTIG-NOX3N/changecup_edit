@@ -265,19 +265,15 @@ elif option == "반별 통계":
         goal_diff = goals - conceded
         points = wins * 3 + draws
 
-        # 통계 요약 출력 (st.info)
-        st.info(f"""
-        📊 **{selected_class} 통계 요약**
-
-        - ✅ 승리: {wins}승  
-        - 🤝 무승부: {draws}무  
-        - ❌ 패배: {losses}패  
-        - ⚽ 득점: {goals}  
-        - 🛡️ 실점: {conceded}  
-        - 🧮 골득실: {goal_diff}  
-        - 🏅 승점: {points}
-        """)
-
+        # 통계 요약 출력
+        st.info(f"✅ **승리**: {wins}승")
+        st.info(f"🤝 **무승부**: {draws}무")
+        st.info(f"❌ **패배**: {losses}패")
+        st.info(f"⚽ **득점**: {goals}")
+        st.info(f"🛡️ **실점**: {conceded}")
+        st.info(f"🧮 **골득실**: {goal_diff}")
+        st.info(f"🏅 **승점**: {points}")
+        
         # 득점자 정보 출력
         st.markdown(f"#### 🔝 {selected_class} 득점자")
         class_scorers = scorers_df[scorers_df['소속'] == selected_class]
