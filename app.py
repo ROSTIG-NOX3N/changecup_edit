@@ -253,10 +253,10 @@ elif option == "반별 통계":
     class_data = class_stats_df[class_stats_df["학반"] == selected_class]
 
     if not class_data.empty:
-        st.markdown(f"#### 🔍 {selected_class} 통계")
+        st.markdown(f"#### 🔍 {selected_class} 경기 데이터")
         st.dataframe(class_data.reset_index(drop=True))
 
-        # 통계 요약 출력
+        # 통계 요약 계산
         wins = int(class_data['승'].sum())
         draws = int(class_data['무'].sum())
         losses = int(class_data['패'].sum())
@@ -265,24 +265,41 @@ elif option == "반별 통계":
         goal_diff = goals - conceded
         points = wins * 3 + draws
 
-        st.markdown(f"#### ⚽ {selected_class}의 통계 요약")
-        st.markdown(f"- ✅ 승리: {wins}승")
-        st.markdown(f"- 🤝 무승부: {draws}무")
-        st.markdown(f"- ❌ 패배: {losses}패")
-        st.markdown(f"- ⚽ 득점: {goals}")
-        st.markdown(f"- 🛡️ 실점: {conceded}")
-        st.markdown(f"- 🧮 골득실: {goal_diff}")
-        st.markdown(f"- 🏅 승점: {points}")
+        # 통계 요약 출력 (st.info)
+        st.info(f"""
+        📊 **{selected_class} 통계 요약**
+
+        - ✅ 승리: {wins}승  
+        - 🤝 무승부: {draws}무  
+        - ❌ 패배: {losses}패  
+        - ⚽ 득점: {goals}  
+        - 🛡️ 실점: {conceded}  
+        - 🧮 골득실: {goal_diff}  
+        - 🏅 승점: {points}
+        """)
 
         # 득점자 정보 출력
         st.markdown(f"#### 🔝 {selected_class} 득점자")
-
         class_scorers = scorers_df[scorers_df['소속'] == selected_class]
+
         if not class_scorers.empty:
-            sorted_scorers = class_scorers.sort_values(by='득점', ascending=False)
-            for idx, row in sorted_scorers.iterrows():
-                st.markdown(f"- {row['이름']} : ⚽ {row['득점']}골")
+            class_scorers = class_scorers.sort_values(by='득점', ascending=False)
+            max_goals = class_scorers['득점'].max()
+
+            for _, row in class_scorers.iterrows():
+                # 메달 색상 지정
+                if row['득점'] == max_goals:
+                    medal_color = 'gold'
+                elif row['득점'] == max_goals - 1:
+                    medal_color = 'silver'
+                elif row['득점'] == max_goals - 2:
+                    medal_color = 'bronze'
+                else:
+                    medal_color = ''
+                
+                # 카드 출력
+                st.markdown(scorer_card(row['이름'], row['소속'], row['득점'], medal_color), unsafe_allow_html=True)
         else:
-            st.info("해당 반의 득점자가 아직 없습니다.")
+            st.warning("⚠️ 해당 반의 득점자 정보가 없습니다.")
 
 
