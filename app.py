@@ -7,6 +7,93 @@ results_df = pd.read_csv('Book(Result).csv')
 scorers_df = pd.read_csv('Book(Scorer).csv')
 class_stats_df = pd.read_csv('Book(Class_Stat).csv')
 
+css = """
+    <style>
+    body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+}
+
+    /* 다크모드 스타일 */
+    @media (prefers-color-scheme: dark) {
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+    
+        /* 사이드바 */
+        .sidebar {
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+    
+        /* 버튼 스타일 */
+        .button {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
+        }
+        
+        /* 제목 */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff;
+        }
+    
+        /* 입력 필드 */
+        input, select, textarea {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
+        }
+    
+        /* 차트/그래프 */
+        .chart {
+            background-color: #222222;
+            color: #ffffff;
+        }
+    
+        /* 카드 */
+        .card {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
+        }
+    
+        /* 텍스트 강조 */
+        .highlight {
+            color: #ff9800;
+        }
+    }
+    
+    /* 라이트모드에 대한 추가 스타일 (필요에 따라) */
+    @media (prefers-color-scheme: light) {
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+    
+        .sidebar {
+            background-color: #f4f4f4;
+            color: #000000;
+        }
+    
+        .button {
+            background-color: #e0e0e0;
+            color: #000000;
+            border: 1px solid #cccccc;
+        }
+    
+        .card {
+            background-color: #f9f9f9;
+            color: #000000;
+            border: 1px solid #ddd;
+        }
+    
+        /* 더 필요한 부분을 추가 */
+    }
+    <style>
+"""
 # 페이지 제목
 st.title("⚽ 2025 아침체인지컵 ")
 
