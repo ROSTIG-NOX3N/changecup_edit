@@ -236,7 +236,6 @@ elif option == "득점자":
             # 득점자 카드 출력
             st.markdown(scorer_card(row['이름'], row['소속'], row['득점'], medal_color), unsafe_allow_html=True)
 
-# 반별 통계 탭
 elif option == "반별 통계":
     st.markdown("### 📋 반별 경기 통계")
 
@@ -258,11 +257,11 @@ elif option == "반별 통계":
         st.dataframe(class_data.reset_index(drop=True))
 
         # 통계 요약 출력
-        wins = int(class_data['승'])
-        draws = int(class_data['무'])
-        losses = int(class_data['패'])
-        goals = int(class_data['득점'])
-        conceded = int(class_data['실점'])
+        wins = int(class_data['승'].sum())
+        draws = int(class_data['무'].sum())
+        losses = int(class_data['패'].sum())
+        goals = int(class_data['득점'].sum())
+        conceded = int(class_data['실점'].sum())
         goal_diff = goals - conceded
         points = wins * 3 + draws
 
@@ -275,5 +274,33 @@ elif option == "반별 통계":
         - 🧮 골득실: {goal_diff}  
         - 🏅 승점: {points}
         """)
+
+        # 그래프 시각화 (득점, 실점, 승점)
+        import matplotlib.pyplot as plt
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+        categories = ['승리', '무승부', '패배', '득점', '실점', '골득실', '승점']
+        values = [wins, draws, losses, goals, conceded, goal_diff, points]
+
+        ax.barh(categories, values, color=['#4CAF50', '#FFC107', '#F44336', '#2196F3', '#9E9E9E', '#673AB7', '#3F51B5'])
+        ax.set_xlabel('값')
+        ax.set_title(f'{selected_class} 통계')
+        st.pyplot(fig)
+
+        # 상위/하위 반 순위
+        class_rankings = class_stats_df.groupby("학반").agg({
+            '승': 'sum', '무': 'sum', '패': 'sum', '득점': 'sum', '실점': 'sum'
+        })
+        class_rankings['승점'] = class_rankings['승'] * 3 + class_rankings['무']
+        class_rankings = class_rankings.sort_values(by='승점', ascending=False)
+
+        st.markdown("#### 🏆 상위 반 순위")
+        st.dataframe(class_rankings.head(5))  # 상위 5개 반
+
+        st.markdown("#### 🏆 하위 반 순위")
+        st.dataframe(class_rankings.tail(5))  # 하위 5개 반
+    else:
+        st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
+
     else:
         st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
