@@ -266,23 +266,23 @@ elif option == "반별 통계":
         points = wins * 3 + draws
 
         st.markdown(f"#### ⚽ {selected_class}의 통계 요약")
-        st.markdown(f"승리: {wins} ")
-        st.markdown(f"무승부: {draws} ")
-        st.markdown(f"패배: {losses} ")
-        st.markdown(f"득점: {goals} ")
-        st.markdown(f"실점: {conceded} ")
-        st.markdown(f"골득실: {goal_diff} ")
-        st.markdown(f"승점: {points} ")
-        st.markdown(f"#### 🔝 {selected_class} 득점자")
-        
-        # 해당 반의 득점자 필터링
-        class_scorers = scorers_df[scorers_df['소속'] == selected_class]
+        st.markdown(f"- ✅ 승리: {wins}승")
+        st.markdown(f"- 🤝 무승부: {draws}무")
+        st.markdown(f"- ❌ 패배: {losses}패")
+        st.markdown(f"- ⚽ 득점: {goals}")
+        st.markdown(f"- 🛡️ 실점: {conceded}")
+        st.markdown(f"- 🧮 골득실: {goal_diff}")
+        st.markdown(f"- 🏅 승점: {points}")
 
+        # 득점자 정보 출력
+        st.markdown(f"#### 🔝 {selected_class} 득점자")
+
+        class_scorers = scorers_df[scorers_df['소속'] == selected_class]
         if not class_scorers.empty:
-            # 득점자 목록을 득점수로 내림차순 정렬
-            sorted_class_scorers = class_scorers.sort_values(by='득점', ascending=False)
-            for idx, row in sorted_class_scorers.iterrows():
-                st.markdown(f"**{row['이름']}**: {row['득점']}골")
+            sorted_scorers = class_scorers.sort_values(by='득점', ascending=False)
+            for idx, row in sorted_scorers.iterrows():
+                st.markdown(f"- {row['이름']} : ⚽ {row['득점']}골")
         else:
-            st.markdown("이 반에는 득점자가 없습니다.")
+            st.info("해당 반의 득점자가 아직 없습니다.")
+
 
