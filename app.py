@@ -266,11 +266,11 @@ elif option == "반별 통계":
         points = wins * 3 + draws
 
         # 통계 요약 출력
-        st.info(f"✅ **승리**: {wins} 승")
-        st.info(f"🤝 **무승부**: {draws} 무")
-        st.info(f"❌ **패배**: {losses} 패")
-        st.info(f"⚽ **득점**: {goals} 득점")
-        st.info(f"🛡️ **실점**: {conceded} 실점")
+        st.success(f"✅ **승리**: {wins} 승")
+        st.warning(f"🤝 **무승부**: {draws} 무")
+        st.error(f"❌ **패배**: {losses} 패")
+        st.success(f"⚽ **득점**: {goals} 득점")
+        st.error(f"🛡️ **실점**: {conceded} 실점")
         st.info(f"🧮 **골득실**: {goal_diff} 점")
         st.info(f"🏅 **승점**: {points} 점")
         
