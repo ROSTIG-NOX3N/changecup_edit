@@ -265,15 +265,20 @@ elif option == "반별 통계":
         goal_diff = goals - conceded
         points = wins * 3 + draws
 
-        st.markdown(f"""
-        - ✅ 승리: {wins}승  
-        - 🤝 무승부: {draws}무  
-        - ❌ 패배: {losses}패  
-        - ⚽ 득점: {goals}  
-        - 🛡️ 실점: {conceded}  
-        - 🧮 골득실: {goal_diff}  
-        - 🏅 승점: {points}
-        """)
-    else:
-        st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
+        st.markdown(f"#### ⚽ {selected_class}의 통계 요약")
+        st.markdown(f"📊 승: {wins} | 무: {draws} | 패: {losses} | 득점: {goals} | 실점: {conceded} | 골득실: {goal_diff} | 승점: {points}")
+
+        # 반별 득점자 목록
+        st.markdown(f"#### 🔝 {selected_class} 득점자")
+        
+        # 해당 반의 득점자 필터링
+        class_scorers = scorers_df[scorers_df['소속'] == selected_class]
+
+        if not class_scorers.empty:
+            # 득점자 목록을 득점수로 내림차순 정렬
+            sorted_class_scorers = class_scorers.sort_values(by='득점', ascending=False)
+            for idx, row in sorted_class_scorers.iterrows():
+                st.markdown(f"**{row['이름']}**: {row['득점']}골")
+        else:
+            st.markdown("이 반에는 득점자가 없습니다.")
 
