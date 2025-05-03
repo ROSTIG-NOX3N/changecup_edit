@@ -277,7 +277,8 @@ elif option == "반별 통계":
 
         # 그래프 시각화 (득점, 실점, 승점)
         import matplotlib.pyplot as plt
-
+        import matplotlib.font_manager as fm
+        
         fig, ax = plt.subplots(figsize=(8, 6))
         categories = ['승리', '무승부', '패배', '득점', '실점', '골득실', '승점']
         values = [wins, draws, losses, goals, conceded, goal_diff, points]
