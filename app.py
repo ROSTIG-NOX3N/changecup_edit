@@ -275,30 +275,34 @@ elif option == "반별 통계":
         - 🏅 승점: {points}
         """)
 
-        # 그래프 시각화 (득점, 실점, 승점)
         import matplotlib.pyplot as plt
         import matplotlib.font_manager as fm
         
+        # 폰트 파일 경로 설정 (프로젝트 내에 폰트 파일이 위치한 경로)
+        font_path = 'fonts/NanumGothic-Regular.ttf'  # 폰트 파일이 있는 경로를 지정
+        font_prop = fm.FontProperties(fname=font_path)
+        
+        # 그래프 시각화 (득점, 실점, 승점)
         fig, ax = plt.subplots(figsize=(8, 6))
         categories = ['승리', '무승부', '패배', '득점', '실점', '골득실', '승점']
         values = [wins, draws, losses, goals, conceded, goal_diff, points]
-
+        
         ax.barh(categories, values, color=['#4CAF50', '#FFC107', '#F44336', '#2196F3', '#9E9E9E', '#673AB7', '#3F51B5'])
-        ax.set_xlabel('값')
-        ax.set_title(f'{selected_class} 통계')
+        ax.set_xlabel('값', fontproperties=font_prop)
+        ax.set_title(f'{selected_class} 통계', fontproperties=font_prop)
         st.pyplot(fig)
-
+        
         # 상위/하위 반 순위
         class_rankings = class_stats_df.groupby("학반").agg({
             '승': 'sum', '무': 'sum', '패': 'sum', '득점': 'sum', '실점': 'sum'
         })
         class_rankings['승점'] = class_rankings['승'] * 3 + class_rankings['무']
         class_rankings = class_rankings.sort_values(by='승점', ascending=False)
-
-        st.markdown("#### 🏆 상위 반 순위")
+        
+        st.markdown("#### 🏆 상위 반 순위", unsafe_allow_html=True)
         st.dataframe(class_rankings.head(5))  # 상위 5개 반
-
-        st.markdown("#### 🏆 하위 반 순위")
+        
+        st.markdown("#### 🏆 하위 반 순위", unsafe_allow_html=True)
         st.dataframe(class_rankings.tail(5))  # 하위 5개 반
     else:
         st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
