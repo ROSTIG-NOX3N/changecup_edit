@@ -266,9 +266,13 @@ elif option == "반별 통계":
         points = wins * 3 + draws
 
         st.markdown(f"#### ⚽ {selected_class}의 통계 요약")
-        st.markdown(f"📊 승: {wins} | 무: {draws} | 패: {losses} | 득점: {goals} | 실점: {conceded} | 골득실: {goal_diff} | 승점: {points}")
-
-        # 반별 득점자 목록
+        st.markdown(f"승리: {wins} ")
+        st.markdown(f"무승부: {draws} ")
+        st.markdown(f"패배: {losses} ")
+        st.markdown(f"득점: {goals} ")
+        st.markdown(f"실점: {conceded} ")
+        st.markdown(f"골득실: {goal_diff} ")
+        st.markdown(f"승점: {points} ")
         st.markdown(f"#### 🔝 {selected_class} 득점자")
         
         # 해당 반의 득점자 필터링
