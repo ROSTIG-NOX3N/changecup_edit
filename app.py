@@ -161,7 +161,7 @@ if option == "메인 메뉴":
                 border-radius: 12px;
                 padding: 15px;
                 margin-bottom: 10px;
-                background-color: #f0f2f6;
+                background-color: #f0f2f6; /* 기본 라이트모드 배경 */
                 border: 1px solid #ccc;
             }
     
@@ -187,13 +187,19 @@ if option == "메인 메뉴":
     
             @media (prefers-color-scheme: dark) {
                 .group-box {
-                    background-color: #2a2a2a;
+                    background-color: #2a2a2a; /* 다크모드 배경 */
                     border: 1px solid #444;
                 }
     
                 .pending {
                     background-color: #444;
                     color: #ccc;
+                }
+    
+                /* 자격이 있는 항목 */
+                .qualified {
+                    background-color: #28a745;
+                    color: white;
                 }
             }
             </style>
