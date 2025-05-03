@@ -302,5 +302,3 @@ elif option == "반별 통계":
     else:
         st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
 
-    else:
-        st.warning(f"{selected_class}에 대한 데이터가 없습니다.")
