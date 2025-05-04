@@ -244,11 +244,20 @@ elif page=='반별 통계':
             st.warning('⚠️ 해당 반의 득점자 정보가 없습니다.')
 
 
-elif page=='경기영상':
+# 경기영상
+elif page == '경기영상':
     st.subheader('🎥 경기 영상')
-    for t,l in video_links.items():
-        st.markdown(f"<div class='video-card'><p class='video-title'>▶ {t} 경기 영상</p></div>",unsafe_allow_html=True)
-        st.video(l)
+    # 경기 선택 버튼
+    games = list(video_links.keys())
+    selected_game = st.selectbox('영상 보기: 경기 선택', games)
+    if st.button('▶ 선택한 경기 영상 보기'):
+        st.video(video_links[selected_game])
+    st.markdown('---')
+    # 전체 영상 리스트
+    for title, link in video_links.items():
+        st.markdown(f"<div class='video-card'><p class='video-title'>▶ {title} 경기 영상</p></div>", unsafe_allow_html=True)
+        st.video(link)
+
 
 elif page=='대진표':
     st.subheader('🏆 토너먼트 대진표')
