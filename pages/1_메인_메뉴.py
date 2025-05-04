@@ -179,6 +179,9 @@ if option == "메인 메뉴":
         st.markdown("<div class='group-box'><h4>C조 : <span class='qualified'>2학년 2반</span></h4></div>", unsafe_allow_html=True)
         st.video("https://youtu.be/ZPLiaRIAfhg")
         st.markdown("<div class='group-box'><h4>D조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>E조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>F조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>G조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
 
 elif option == "득점자":
     st.subheader("다득점자")
