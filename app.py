@@ -68,8 +68,20 @@ def scorer_card(name, team, goals, medal_color):
 </div>
 """
 
+# 대진표 함수
+def show_bracket(path='bracket.png'):
+    img = Image.open(path)
+    buffered = BytesIO()
+    img.save(buffered, format='PNG')
+    b64 = base64.b64encode(buffered.getvalue()).decode()
+    st.markdown(f"""
+<div style='overflow-x:auto;'>
+  <img src='data:image/png;base64,{b64}' style='width:100%;height:auto;'>
+</div>
+""", unsafe_allow_html=True)
+
 # 사이드바 메뉴
-page = st.sidebar.selectbox('Menu', ['메인 메뉴','경기 일정','득점자','반별 통계','경기영상','조별결과'])
+page = st.sidebar.selectbox('Menu', ['메인 메뉴','경기 일정','득점자','반별 통계','경기영상','조별결과','대진표'])
 
 # 메인 메뉴
 if page == '메인 메뉴':
@@ -155,3 +167,8 @@ elif page == '조별결과':
         styled = grp_df.sort_values(['승점','골득실','득점','실점'],ascending=[False,False,False,True])
         st.dataframe(styled[['학반','승','무','패','득점','실점','승점','골득실']]
                      .style.apply(lambda r: ['background-color: green']*len(r) if r['학반']=='2학년 2반' else ['']*len(r),axis=1))
+
+# 대진표
+elif page == '대진표':
+    st.subheader('🏆 토너먼트 대진표')
+    show_bracket('bracket.png')
