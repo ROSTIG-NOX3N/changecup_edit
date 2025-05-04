@@ -117,12 +117,15 @@ if page == '메인 메뉴':
             </style>
         """, unsafe_allow_html=True)
 
-        for grp,label in zip(['A','B','C','D','E','F','G'],
-                             ['미정','미정','2학년 2반','미정','미정','미정','미정']):
-            status='qualified' if grp=='C' else 'pending'
-            st.markdown(f"<div class='group-box'><h4>{grp}조 : <span class='{status}'>{label}</span></h4></div>",unsafe_allow_html=True)
-
+        st.markdown("<div class='group-box'><h4>A조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>B조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>C조 : <span class='qualified'>2학년 2반</span></h4></div>", unsafe_allow_html=True)
         st.video('https://youtu.be/ZPLiaRIAfhg')
+        st.markdown("<div class='group-box'><h4>D조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>E조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>F조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+        st.markdown("<div class='group-box'><h4>G조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
+
 
 elif page=='경기 일정':
     st.subheader('📅 경기 일정')
