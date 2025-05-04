@@ -6,6 +6,8 @@ from io import BytesIO
 # 이미지 열기
 img = Image.open('bracket.png')
 
+st.set_page_config(layout="wide")
+
 # 이미지를 메모리 버퍼에 저장하고 base64로 인코딩
 buffered = BytesIO()
 img.save(buffered, format="PNG")
