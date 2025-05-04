@@ -247,11 +247,15 @@ elif page=='반별 통계':
 # 경기영상
 elif page == '경기영상':
     st.subheader('🎥 경기 영상')
-    # 경기 선택 버튼
-    games = list(video_links.keys())
-    selected_game = st.selectbox('영상 보기: 경기 선택', games)
+    # 경기 선택 버튼에 '경기' 접두어 추가
+    game_keys = list(video_links.keys())
+    game_options = [f"경기 {k}" for k in game_keys]
+    selected_disp = st.selectbox('영상 보기: 경기 선택', game_options)
     if st.button('▶ 선택한 경기 영상 보기'):
-        st.video(video_links[selected_game],'경기')
+        # 선택된 옵션에서 숫자를 추출하여 원본 키로 매핑
+        idx = game_options.index(selected_disp)
+        key = game_keys[idx]
+        st.video(video_links[key])
     st.markdown('---')
     # 전체 영상 리스트
     for title, link in video_links.items():
