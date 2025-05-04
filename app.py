@@ -240,13 +240,47 @@ elif option == "반별 통계":
             st.warning("⚠️ 해당 반의 득점자 정보가 없습니다.")
 
 elif option == "경기영상":
+    st.markdown("""
+        <style>
+        .video-card {
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            background-color: #fafafa;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #007acc;
+            margin-bottom: 8px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .video-card {
+                background-color: #2a2a2a;
+                border: 1px solid #444;
+            }
+
+            .video-title {
+                color: #61dafb;
+            }
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     st.markdown("### 🎥 경기 영상")
+
     for title, link in video_links.items():
         st.markdown(f"""
             <div class="video-card">
-                <a href="{link}" target="_blank" class="video-title">▶ {title} 경기 영상</a>
+                <p class="video-title">▶ {title} 경기 영상</p>
             </div>
         """, unsafe_allow_html=True)
+        st.video(link)
+
+
 
 elif option == "조별결과":
     st.markdown("### 🏆 조별 결과")
