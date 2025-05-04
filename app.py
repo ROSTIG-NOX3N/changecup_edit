@@ -251,7 +251,7 @@ elif page == '경기영상':
     games = list(video_links.keys())
     selected_game = st.selectbox('영상 보기: 경기 선택', games)
     if st.button('▶ 선택한 경기 영상 보기'):
-        st.video(video_links[selected_game].'경기')
+        st.video(video_links[selected_game],'경기')
     st.markdown('---')
     # 전체 영상 리스트
     for title, link in video_links.items():
