@@ -143,8 +143,6 @@ if page == '메인 메뉴':
             </style>
         """, unsafe_allow_html=True)    
     with tabs[1]:
-        st.subheader('본선 진출 현황')
-
         st.markdown("""
             <style>
             .group-box {
