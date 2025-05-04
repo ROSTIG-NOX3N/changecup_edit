@@ -109,6 +109,7 @@ if page == '메인 메뉴':
           <li>5월 21일 : 체육대회</li>
         </ul>
         """, unsafe_allow_html=True)
+        st.markdown("[🔗 부산동성고등학교 YouTube 채널](https://youtube.com/channel/UCMPDrRlZYtIgqHN_DRSDoxw?si=sBBUHlKSu6NpEGhK)")
     with tabs[1]:  # 본선 진출 현황 탭
         st.subheader('본선 진출 현황')
         st.markdown("""
