@@ -2,15 +2,16 @@ import streamlit as st
 import pandas as pd
 from video_links import video_links  # ← 이 파일이 존재해야 함
 
+st.set_page_config(
+    page_title="메인 메뉴",  # ← 브라우저 탭에 보일 이름
+    layout="wide"
+)
+
 # 데이터 불러오기
 results_df = pd.read_csv('Book(Result).csv')
 scorers_df = pd.read_csv('Book(Scorer).csv')
 class_stats_df = pd.read_csv('Book(Class_Stat).csv')
 
-st.set_page_config(
-    page_title="메인 메뉴",  # ← 브라우저 탭에 보일 이름
-    layout="wide"
-)
 
 # CSS
 css = """
