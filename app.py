@@ -103,8 +103,6 @@ if page == '메인 메뉴':
         """, unsafe_allow_html=True)
         st.info('🔗 부산동성고등학교 YouTube 채널 안내')
         st.markdown("[🔗 YouTube 채널 바로가기](https://youtube.com/channel/UCMPDrRlZYtIgqHN_DRSDoxw?si=sBBUHlKSu6NpEGhK)")
-        </ul>
-        """, unsafe_allow_html=True)
         st.info('📅 학사 일정')
         st.markdown("""
         <ul style='margin:0; padding-left:20px;'>
