@@ -249,7 +249,7 @@ elif page == '경기영상':
     st.subheader('🎥 경기 영상')
     # 경기 선택 버튼에 '경기' 접두어 추가
     game_keys = list(video_links.keys())
-    game_options = [f"경기 {k}" for k in game_keys]
+    game_options = [f"{k}경기" for k in game_keys]
     selected_disp = st.selectbox('영상 보기: 경기 선택', game_options)
     if st.button('▶ 선택한 경기 영상 보기'):
         # 선택된 옵션에서 숫자를 추출하여 원본 키로 매핑
@@ -261,7 +261,6 @@ elif page == '경기영상':
     for title, link in video_links.items():
         st.markdown(f"<div class='video-card'><p class='video-title'>▶ {title} 경기 영상</p></div>", unsafe_allow_html=True)
         st.video(link)
-
 
 elif page=='대진표':
     st.subheader('🏆 토너먼트 대진표')
