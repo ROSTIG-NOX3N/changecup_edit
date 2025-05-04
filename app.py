@@ -23,7 +23,7 @@ st.markdown("""
 body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif; }
 @media (prefers-color-scheme: dark) {
   body { background-color: #121212; color: #ffffff; }
-  .sidebar { background-color: #1f1f1f; color: #ffffff; }
+  .sidebar, .stSidebar { background-color: #1f1f1f; color: #ffffff; }
   .button, input, select, textarea { background-color: #333333; color: #ffffff; border: 1px solid #555555; }
   h1, h2, h3, h4, h5, h6 { color: #ffffff; }
 }
@@ -37,6 +37,8 @@ body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif
   .pending { background-color: #444; color: #ccc; }
   .qualified { background-color: #28a745; }
 }
+.notice-box { border-left: 4px solid #007acc; background-color: #e6f7ff; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+@media (prefers-color-scheme: dark) { .notice-box { background-color: #1a1a1a; border-left-color: #61dafb; color: #ccc; } }
 .match-card { border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin-bottom: 12px; background-color: #f5f5f5; }
 .match-card h4 { margin-bottom: 8px; }
 .match-card p { margin: 4px 0; font-size: 16px; }
@@ -52,11 +54,13 @@ body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif
 # 제목
 st.title("⚽ 2025 아침체인지컵")
 
+# 클래스 정렬 키
 def sort_key(class_name):
     grade, ban = class_name.split('학년 ')
-    return int(grade)*10 + int(ban.replace('반',''))
+    return int(grade) * 10 + int(ban.replace('반',''))
 class_stats_df['sort_order'] = class_stats_df['학반'].apply(sort_key)
 
+# 득점자 카드 생성 함수
 def scorer_card(name, team, goals, medal_color):
     medal = {'gold':'🥇','silver':'🥈','bronze':'🥉'}.get(medal_color, '')
     return f"""
@@ -66,6 +70,7 @@ def scorer_card(name, team, goals, medal_color):
 </div>
 """
 
+# 대진표 표시 함수
 def show_bracket(path='bracket.png'):
     img = Image.open(path)
     buffered = BytesIO()
@@ -77,20 +82,66 @@ def show_bracket(path='bracket.png'):
 </div>
 """, unsafe_allow_html=True)
 
-page = st.sidebar.selectbox('Menu',['메인 메뉴','경기 일정','득점자','반별 통계','경기영상','조별결과','대진표'])
+# 사이드바 메뉴
+page = st.sidebar.selectbox(
+    'Menu',
+    ['메인 메뉴','경기 일정','득점자','반별 통계','경기영상','조별결과','대진표']
+)
 
 # 메인 메뉴
 if page == '메인 메뉴':
-    tabs = st.tabs(['공지사항', '본선 진출 현황'])
-    with tabs[0]:
+    tabs = st.tabs(['공지사항','본선 진출 현황'])
+    with tabs[0]:  # 공지사항 탭
         st.header('🔔 공지사항')
-        st.subheader('매 경기 후 자동으로 데이터 반영 예정')
-        st.subheader('개선사항은 학생회 단톡으로 공지 예정')
-        st.info('학사 일정')
-        st.markdown('5월 8일 목요일 3학년 학력평가')
-        st.markdown('5월 13일 ~ 5월 16일 2학년 수학여행')
-        st.markdown('5월 21일 체육대회')
-    
+        st.markdown("""
+        <div class='notice-box'>
+          <ul style='margin:0; padding-left:20px;'>
+            <li>매 경기 후 자동으로 데이터 반영 예정</li>
+            <li>개선사항은 학생회 단톡으로 공지 예정</li>
+          </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        st.info('📅 학사 일정')
+        st.markdown("""
+        <ul style='margin:0; padding-left:20px;'>
+          <li>5월 8일 목요일: 3학년 학력평가</li>
+          <li>5월 13일 ~ 16일: 2학년 수학여행</li>
+          <li>5월 21일: 체육대회</li>
+        </ul>
+        """, unsafe_allow_html=True)
+    with tabs[1]:  # 본선 진출 현황 탭
+        st.subheader('본선 진출 현황')
+        st.markdown("""
+            <style>
+            .group-box {
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 10px;
+                background-color: #f0f2f6;
+                border: 1px solid #ccc;
+            }
+            .group-box h4 { margin: 0; }
+            .qualified {
+                color: white;
+                background-color: #28a745;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 0.9em;
+            }
+            .pending {
+                color: #555;
+                background-color: #eaeaea;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 0.9em;
+            }
+            @media (prefers-color-scheme: dark) {
+                .group-box { background-color: #2a2a2a; border: 1px solid #444; }
+                .pending { background-color: #444; color: #ccc; }
+                .qualified { background-color: #28a745; color: white; }
+            }
+            </style>
+        """, unsafe_allow_html=True)    
     with tabs[1]:
         st.subheader('본선 진출 현황')
 
