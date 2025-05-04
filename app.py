@@ -89,8 +89,6 @@ css = """
             color: #000000;
             border: 1px solid #ddd;
         }
-    
-        /* 더 필요한 부분을 추가 */
     }
     <style>
 """
@@ -108,7 +106,7 @@ class_stats_df["sort_order"] = class_stats_df["학반"].apply(sort_key)
 # 사이드 메뉴
 option = st.sidebar.selectbox(
     'Menu',
-    ("메인 메뉴", "득점자", "반별 통계")
+    ("메인 메뉴", "득점자", "반별 통계", "경기영상", "조별결과")
 )
 
 # CSS 영역
@@ -151,7 +149,7 @@ def scorer_card(name, team, goals, medal_color):
 
 if option == "메인 메뉴":
     # 탭 4개: 공지사항, 경기영상, 조별결과, 전체결과
-    tab1, tab2, tab3, tab4 = st.tabs(["공지사항", "경기영상", "조별결과", "전체 결과"])
+    tab1 = st.tabs(["본선 진출 현황"])
 
     with tab1:
         st.subheader("본선 진출 현황")
@@ -213,98 +211,6 @@ if option == "메인 메뉴":
         st.markdown("<div class='group-box'><h4>E조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
         st.markdown("<div class='group-box'><h4>F조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
         st.markdown("<div class='group-box'><h4>G조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
-
-    with tab2:
-        st.markdown("""
-            <style>
-            .video-card {
-                border: 1px solid #ccc;
-                border-radius: 12px;
-                padding: 12px 16px;
-                margin-bottom: 10px;
-                background-color: #fafafa;
-                transition: all 0.3s ease;
-            }
-    
-            .video-card:hover {
-                background-color: #f0f0f0;
-            }
-    
-            .video-title {
-                font-size: 16px;
-                font-weight: 600;
-                color: #007acc;
-                text-decoration: none;
-            }
-    
-            @media (prefers-color-scheme: dark) {
-                .video-card {
-                    background-color: #2a2a2a;
-                    border: 1px solid #444;
-                }
-    
-                .video-title {
-                    color: #61dafb;
-                }
-    
-                .video-card:hover {
-                    background-color: #333;
-                }
-            }
-            </style>
-        """, unsafe_allow_html=True)
-    
-        st.markdown("### 🎥 경기 영상")
-    
-        for title, link in video_links.items():
-            st.markdown(f"""
-            <div class="video-card">
-                <a href="{link}" target="_blank" class="video-title">▶ {title}경기 영상</a>
-            </div>
-            """, unsafe_allow_html=True)
-            
-    with tab3:
-        st.markdown("### 🏆 조별 결과")
-    
-        class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
-        class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
-    
-        grouped = class_stats_df.copy()
-    
-        def highlight_qualified(row):
-            if row["학반"] == "2학년 2반":
-                return ['background-color: green'] * len(row)
-            return [''] * len(row)
-    
-        for group, group_data in grouped.groupby("조"):
-            st.markdown(f"#### 조 {group}")
-            sorted_group = group_data.sort_values(
-                by=["승점", "골득실", "득점", "실점"],
-                ascending=[False, False, False, True]
-            )
-            st.dataframe(
-                sorted_group[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
-                .style.apply(highlight_qualified, axis=1)
-            )
-
-    with tab4:
-        st.markdown("### 📊 전체 결과")
-    
-        class_stats_df_display = class_stats_df.copy()
-        class_stats_df_display["승점"] = class_stats_df_display["승"] * 3 + class_stats_df_display["무"]
-        class_stats_df_display["골득실"] = class_stats_df_display["득점"] - class_stats_df_display["실점"]
-    
-        sorted_all = class_stats_df_display.sort_values(by="sort_order")
-    
-        def highlight_qualified(row):
-            if row["학반"] == "2학년 2반":
-                return ['background-color: green'] * len(row)
-            return [''] * len(row)
-    
-        st.dataframe(
-            sorted_all[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
-            .style.apply(highlight_qualified, axis=1)
-        )
 # 득점자 탭
 elif option == "득점자":
     st.subheader("다득점자")
@@ -391,4 +297,76 @@ elif option == "반별 통계":
         else:
             st.warning("⚠️ 해당 반의 득점자 정보가 없습니다.")
 
+elif option == "경기 영상" :
+        st.markdown("""
+            <style>
+            .video-card {
+                border: 1px solid #ccc;
+                border-radius: 12px;
+                padding: 12px 16px;
+                margin-bottom: 10px;
+                background-color: #fafafa;
+                transition: all 0.3s ease;
+            }
+    
+            .video-card:hover {
+                background-color: #f0f0f0;
+            }
+    
+            .video-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #007acc;
+                text-decoration: none;
+            }
+    
+            @media (prefers-color-scheme: dark) {
+                .video-card {
+                    background-color: #2a2a2a;
+                    border: 1px solid #444;
+                }
+    
+                .video-title {
+                    color: #61dafb;
+                }
+    
+                .video-card:hover {
+                    background-color: #333;
+                }
+            }
+            </style>
+        """, unsafe_allow_html=True)
+    
+        st.markdown("### 🎥 경기 영상")
+    
+        for title, link in video_links.items():
+            st.markdown(f"""
+            <div class="video-card">
+                <a href="{link}" target="_blank" class="video-title">▶ {title}경기 영상</a>
+            </div>
+            """, unsafe_allow_html=True)
+
+elif option == "조별 결과" :
+        st.markdown("### 🏆 조별 결과")
+    
+        class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
+        class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
+    
+        grouped = class_stats_df.copy()
+    
+        def highlight_qualified(row):
+            if row["학반"] == "2학년 2반":
+                return ['background-color: green'] * len(row)
+            return [''] * len(row)
+    
+        for group, group_data in grouped.groupby("조"):
+            st.markdown(f"#### 조 {group}")
+            sorted_group = group_data.sort_values(
+                by=["승점", "골득실", "득점", "실점"],
+                ascending=[False, False, False, True]
+            )
+            st.dataframe(
+                sorted_group[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
+                .style.apply(highlight_qualified, axis=1)
+            )
 
