@@ -1,98 +1,82 @@
 import streamlit as st
 import pandas as pd
-from video_links import video_links
+from video_links import video_links  # ← 이 파일이 존재해야 함
 
 # 데이터 불러오기
 results_df = pd.read_csv('Book(Result).csv')
 scorers_df = pd.read_csv('Book(Scorer).csv')
 class_stats_df = pd.read_csv('Book(Class_Stat).csv')
 
+# CSS
 css = """
     <style>
     body {
-    background-color: #ffffff;
-    color: #000000;
-    font-family: Arial, sans-serif;
-}
+        background-color: #ffffff;
+        color: #000000;
+        font-family: Arial, sans-serif;
+    }
 
-    /* 다크모드 스타일 */
     @media (prefers-color-scheme: dark) {
         body {
             background-color: #121212;
             color: #ffffff;
         }
-    
-        /* 사이드바 */
         .sidebar {
             background-color: #1f1f1f;
             color: #ffffff;
         }
-    
-        /* 버튼 스타일 */
         .button {
             background-color: #333333;
             color: #ffffff;
             border: 1px solid #555555;
         }
-        
-        /* 제목 */
         h1, h2, h3, h4, h5, h6 {
             color: #ffffff;
         }
-    
-        /* 입력 필드 */
         input, select, textarea {
             background-color: #333333;
             color: #ffffff;
             border: 1px solid #555555;
         }
-    
-        /* 차트/그래프 */
         .chart {
             background-color: #222222;
             color: #ffffff;
         }
-    
-        /* 카드 */
         .card {
             background-color: #333333;
             color: #ffffff;
             border: 1px solid #555555;
         }
-    
-        /* 텍스트 강조 */
         .highlight {
             color: #ff9800;
         }
     }
-    
-    /* 라이트모드에 대한 추가 스타일 (필요에 따라) */
+
     @media (prefers-color-scheme: light) {
         body {
             background-color: #ffffff;
             color: #000000;
         }
-    
         .sidebar {
             background-color: #f4f4f4;
             color: #000000;
         }
-    
         .button {
             background-color: #e0e0e0;
             color: #000000;
             border: 1px solid #cccccc;
         }
-    
         .card {
             background-color: #f9f9f9;
             color: #000000;
             border: 1px solid #ddd;
         }
     }
-    <style>
+    </style>
 """
-# 페이지 제목
+st.markdown(css, unsafe_allow_html=True)
+
+# 제목
 st.title("⚽ 2025 아침체인지컵 ")
 
 def sort_key(class_name):
@@ -109,7 +93,7 @@ option = st.sidebar.selectbox(
     ("메인 메뉴", "득점자", "반별 통계", "경기영상", "조별결과")
 )
 
-# CSS 영역
+# 득점자 카드 스타일 함수
 def scorer_card(name, team, goals, medal_color):
     medal_html = ""
     if medal_color == 'gold':
@@ -128,7 +112,6 @@ def scorer_card(name, team, goals, medal_color):
         margin-bottom: 10px;
         background-color: #f5f5f5;
         color: #000;
-        transition: all 0.3s ease;
     }}
 
     @media (prefers-color-scheme: dark) {{
@@ -147,26 +130,22 @@ def scorer_card(name, team, goals, medal_color):
     """
     return card_html
 
+# 각 메뉴에 대한 분기
 if option == "메인 메뉴":
-    # 탭 4개: 공지사항, 경기영상, 조별결과, 전체결과
-    tab1 = st.tabs(["본선 진출 현황"])
-
-    with tab1:
+    tabs = st.tabs(["본선 진출 현황"])
+    with tabs[0]:
         st.subheader("본선 진출 현황")
+
         st.markdown("""
             <style>
             .group-box {
                 border-radius: 12px;
                 padding: 15px;
                 margin-bottom: 10px;
-                background-color: #f0f2f6; /* 기본 라이트모드 배경 */
+                background-color: #f0f2f6;
                 border: 1px solid #ccc;
             }
-    
-            .group-box h4 {
-                margin: 0;
-            }
-    
+            .group-box h4 { margin: 0; }
             .qualified {
                 color: white;
                 background-color: #28a745;
@@ -174,7 +153,6 @@ if option == "메인 메뉴":
                 border-radius: 6px;
                 font-size: 0.9em;
             }
-    
             .pending {
                 color: #555;
                 background-color: #eaeaea;
@@ -182,80 +160,50 @@ if option == "메인 메뉴":
                 border-radius: 6px;
                 font-size: 0.9em;
             }
-    
             @media (prefers-color-scheme: dark) {
-                .group-box {
-                    background-color: #2a2a2a; /* 다크모드 배경 */
-                    border: 1px solid #444;
-                }
-    
-                .pending {
-                    background-color: #444;
-                    color: #ccc;
-                }
-    
-                /* 자격이 있는 항목 */
-                .qualified {
-                    background-color: #28a745;
-                    color: white;
-                }
+                .group-box { background-color: #2a2a2a; border: 1px solid #444; }
+                .pending { background-color: #444; color: #ccc; }
+                .qualified { background-color: #28a745; color: white; }
             }
             </style>
         """, unsafe_allow_html=True)
-    
+
         st.markdown("<div class='group-box'><h4>A조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
         st.markdown("<div class='group-box'><h4>B조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
         st.markdown("<div class='group-box'><h4>C조 : <span class='qualified'>2학년 2반</span></h4></div>", unsafe_allow_html=True)
         st.video("https://youtu.be/ZPLiaRIAfhg")
         st.markdown("<div class='group-box'><h4>D조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
-        st.markdown("<div class='group-box'><h4>E조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
-        st.markdown("<div class='group-box'><h4>F조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
-        st.markdown("<div class='group-box'><h4>G조 : <span class='pending'>미정</span></h4></div>", unsafe_allow_html=True)
-# 득점자 탭
+
 elif option == "득점자":
     st.subheader("다득점자")
-
-    # 득점자 목록을 득점수로 내림차순 정렬
     sorted_scorers = scorers_df.sort_values(by='득점', ascending=False)
-    max_goals = sorted_scorers['득점'].max()  # 최대 득점 계산
+    max_goals = sorted_scorers['득점'].max()
 
-    # 득점자가 2골 이상인 경우만 카드 출력
-    for idx, row in sorted_scorers.iterrows():
-        if row['득점'] >= 2:  # 2골 이상인 경우만 출력
-            # 메달 색상 설정
+    for _, row in sorted_scorers.iterrows():
+        if row['득점'] >= 2:
             if row['득점'] == max_goals:
-                medal_color = 'gold'  # 금메달
+                medal_color = 'gold'
             elif row['득점'] == max_goals - 1:
-                medal_color = 'silver'  # 은메달
+                medal_color = 'silver'
             elif row['득점'] == max_goals - 2:
-                medal_color = 'bronze'  # 동메달
+                medal_color = 'bronze'
             else:
-                medal_color = ''  # 메달 없음
-    
-            # 득점자 카드 출력
+                medal_color = ''
             st.markdown(scorer_card(row['이름'], row['소속'], row['득점'], medal_color), unsafe_allow_html=True)
 
 elif option == "반별 통계":
     st.markdown("### 📋 반별 경기 통계")
-
-    # 학년/반 선택 위젯
     col1, col2 = st.columns(2)
     with col1:
         grade = st.selectbox("학년 선택", [1, 2, 3])
     with col2:
         classroom = st.selectbox("반 선택", [1, 2, 3, 4, 5, 6, 7])
-
-    # 선택된 학반 문자열로 조합
     selected_class = f"{grade}학년 {classroom}반"
-
-    # 해당 반의 데이터 필터링
     class_data = class_stats_df[class_stats_df["학반"] == selected_class]
 
     if not class_data.empty:
         st.markdown(f"#### 🔍 {selected_class} 경기 데이터")
         st.dataframe(class_data.reset_index(drop=True))
-
-        # 통계 요약 계산
         wins = int(class_data['승'].sum())
         draws = int(class_data['무'].sum())
         losses = int(class_data['패'].sum())
@@ -263,8 +211,6 @@ elif option == "반별 통계":
         conceded = int(class_data['실점'].sum())
         goal_diff = goals - conceded
         points = wins * 3 + draws
-
-        # 통계 요약 출력
         st.success(f"✅ **승리**: {wins} 승")
         st.warning(f"🤝 **무승부**: {draws} 무")
         st.error(f"❌ **패배**: {losses} 패")
@@ -272,8 +218,7 @@ elif option == "반별 통계":
         st.error(f"🛡️ **실점**: {conceded} 실점")
         st.info(f"🧮 **골득실**: {goal_diff} 점")
         st.info(f"🏅 **승점**: {points} 점")
-        
-        # 득점자 정보 출력
+
         st.markdown(f"#### 🔝 {selected_class} 득점자")
         class_scorers = scorers_df[scorers_df['소속'] == selected_class]
 
@@ -282,7 +227,6 @@ elif option == "반별 통계":
             max_goals = class_scorers['득점'].max()
 
             for _, row in class_scorers.iterrows():
-                # 메달 색상 지정
                 if row['득점'] == max_goals:
                     medal_color = 'gold'
                 elif row['득점'] == max_goals - 1:
@@ -291,82 +235,34 @@ elif option == "반별 통계":
                     medal_color = 'bronze'
                 else:
                     medal_color = ''
-                
-                # 카드 출력
                 st.markdown(scorer_card(row['이름'], row['소속'], row['득점'], medal_color), unsafe_allow_html=True)
         else:
             st.warning("⚠️ 해당 반의 득점자 정보가 없습니다.")
 
-elif option == "경기 영상" :
-        st.markdown("""
-            <style>
-            .video-card {
-                border: 1px solid #ccc;
-                border-radius: 12px;
-                padding: 12px 16px;
-                margin-bottom: 10px;
-                background-color: #fafafa;
-                transition: all 0.3s ease;
-            }
-    
-            .video-card:hover {
-                background-color: #f0f0f0;
-            }
-    
-            .video-title {
-                font-size: 16px;
-                font-weight: 600;
-                color: #007acc;
-                text-decoration: none;
-            }
-    
-            @media (prefers-color-scheme: dark) {
-                .video-card {
-                    background-color: #2a2a2a;
-                    border: 1px solid #444;
-                }
-    
-                .video-title {
-                    color: #61dafb;
-                }
-    
-                .video-card:hover {
-                    background-color: #333;
-                }
-            }
-            </style>
-        """, unsafe_allow_html=True)
-    
-        st.markdown("### 🎥 경기 영상")
-    
-        for title, link in video_links.items():
-            st.markdown(f"""
+elif option == "경기영상":
+    st.markdown("### 🎥 경기 영상")
+    for title, link in video_links.items():
+        st.markdown(f"""
             <div class="video-card">
-                <a href="{link}" target="_blank" class="video-title">▶ {title}경기 영상</a>
+                <a href="{link}" target="_blank" class="video-title">▶ {title} 경기 영상</a>
             </div>
-            """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
-elif option == "조별 결과" :
-        st.markdown("### 🏆 조별 결과")
-    
-        class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
-        class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
-    
-        grouped = class_stats_df.copy()
-    
-        def highlight_qualified(row):
-            if row["학반"] == "2학년 2반":
-                return ['background-color: green'] * len(row)
-            return [''] * len(row)
-    
-        for group, group_data in grouped.groupby("조"):
-            st.markdown(f"#### 조 {group}")
-            sorted_group = group_data.sort_values(
-                by=["승점", "골득실", "득점", "실점"],
-                ascending=[False, False, False, True]
-            )
-            st.dataframe(
-                sorted_group[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
-                .style.apply(highlight_qualified, axis=1)
-            )
+elif option == "조별결과":
+    st.markdown("### 🏆 조별 결과")
+    class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
+    class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
 
+    def highlight_qualified(row):
+        return ['background-color: green'] * len(row) if row["학반"] == "2학년 2반" else [''] * len(row)
+
+    for group, group_data in class_stats_df.groupby("조"):
+        st.markdown(f"#### 조 {group}")
+        sorted_group = group_data.sort_values(
+            by=["승점", "골득실", "득점", "실점"],
+            ascending=[False, False, False, True]
+        )
+        st.dataframe(
+            sorted_group[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
+            .style.apply(highlight_qualified, axis=1)
+        )
