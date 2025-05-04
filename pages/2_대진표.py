@@ -1,24 +1,26 @@
 from PIL import Image
 import streamlit as st
-import base64
-from io import BytesIO
-
-# 이미지 열기
-img = Image.open('bracket.png')
 
 st.set_page_config(layout="wide")
 
-# 이미지를 메모리 버퍼에 저장하고 base64로 인코딩
-buffered = BytesIO()
-img.save(buffered, format="PNG")
-img_b64 = base64.b64encode(buffered.getvalue()).decode()
+# 이미지 열기
+img = Image.open("bracket.png")
 
-# HTML을 이용해 스크롤 가능한 큰 이미지로 출력
-st.markdown(
-    f"""
-    <div style="overflow-x: auto; border: 1px solid #ccc">
-        <img src="data:image/png;base64,{img_b64}" style="min-width:1000px;">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# HTML + Streamlit 조합으로 가로 스크롤 지원
+st.markdown("""
+    <style>
+    .scroll-container {
+        overflow-x: auto;
+        border: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+    .scroll-container img {
+        display: block;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# 이미지 표시 (base64 없이 직접 표시)
+st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
+st.image(img)
+st.markdown('</div>', unsafe_allow_html=True)
