@@ -253,7 +253,7 @@ elif page=='대진표':
         show_bracket('bracket.png')
     st.caption('※ 이미지가 크면 좌우로 스크롤하여 확인하세요.')
 
-elif option == "조별결과":
+elif page=="조별결과":
     st.markdown("### 🏆 조별 결과")
     class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
     class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
