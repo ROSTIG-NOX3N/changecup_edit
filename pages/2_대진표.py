@@ -4,7 +4,7 @@ import base64
 from io import BytesIO
 
 # 이미지 열기
-img = Image.open('대진표.png')
+img = Image.open('bracket.png')
 
 # 이미지를 메모리 버퍼에 저장하고 base64로 인코딩
 buffered = BytesIO()
