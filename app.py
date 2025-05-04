@@ -27,10 +27,6 @@ body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif
   .button, input, select, textarea { background-color: #333333; color: #ffffff; border: 1px solid #555555; }
   h1, h2, h3, h4, h5, h6 { color: #ffffff; }
 }
-@media (prefers-color-scheme: light) {
-  .sidebar { background-color: #f4f4f4; color: #000000; }
-  .button { background-color: #e0e0e0; color: #000000; border: 1px solid #cccccc; }
-}
 .scorer-card { border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin-bottom: 10px; background-color: #f5f5f5; color: #000; }
 @media (prefers-color-scheme: dark) { .scorer-card { background-color: #222; color: #fff; border: 1px solid #555; } }
 .group-box { border-radius: 12px; padding: 15px; margin-bottom: 10px; background-color: #f0f2f6; border: 1px solid #ccc; }
@@ -41,10 +37,15 @@ body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif
   .pending { background-color: #444; color: #ccc; }
   .qualified { background-color: #28a745; }
 }
+.match-card { border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin-bottom: 12px; background-color: #f5f5f5; }
+.match-card h4 { margin-bottom: 8px; }
+.match-card p { margin: 4px 0; font-size: 16px; }
+@media (prefers-color-scheme: dark) { .match-card { background-color: #1f1f1f; border: 1px solid #444; color: #eee; } }
+.scheduled { background-color: #e0e0e0; }
+@media (prefers-color-scheme: dark) { .scheduled { background-color: #2a2a2a; } }
 .video-card { border: 1px solid #ccc; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; background-color: #fafafa; }
-@media (prefers-color-scheme: dark) { .video-card { background-color: #2a2a2a; border: 1px solid #444; } }
 .video-title { font-size: 16px; font-weight: 600; color: #007acc; margin-bottom: 8px; }
-@media (prefers-color-scheme: dark) { .video-title { color: #61dafb; } }
+@media (prefers-color-scheme: dark) { .video-card { background-color: #2a2a2a; border: 1px solid #444; } .video-title { color: #61dafb; } }
 </style>
 """, unsafe_allow_html=True)
 
@@ -52,13 +53,9 @@ body { background-color: #ffffff; color: #000000; font-family: Arial, sans-serif
 st.title("⚽ 2025 아침체인지컵")
 
 # 클래스 정렬 키
-
 def sort_key(class_name):
     grade, ban = class_name.split('학년 ')
-    grade = int(grade)
-    ban = int(ban.replace('반',''))
-    return grade * 10 + ban
-
+    return int(grade)*10 + int(ban.replace('반',''))
 class_stats_df['sort_order'] = class_stats_df['학반'].apply(sort_key)
 
 # 득점자 카드 함수
@@ -72,7 +69,7 @@ def scorer_card(name, team, goals, medal_color):
 """
 
 # 사이드바 메뉴
-page = st.sidebar.selectbox('Menu', ['메인 메뉴','득점자','반별 통계','경기영상','조별결과'])
+page = st.sidebar.selectbox('Menu', ['메인 메뉴','경기 일정','득점자','반별 통계','경기영상','조별결과'])
 
 # 메인 메뉴
 if page == '메인 메뉴':
@@ -83,14 +80,33 @@ if page == '메인 메뉴':
         st.markdown(f"<div class='group-box'><h4>{grp}조 : <span class='{status}'>{label}</span></h4></div>", unsafe_allow_html=True)
     st.video('https://youtu.be/ZPLiaRIAfhg')
 
+# 경기 일정
+elif page == '경기 일정':
+    st.subheader('📅 경기 일정')
+    tabs = st.tabs(['✅ 완료된 경기','⏳ 예정된 경기'])
+    with tabs[0]:
+        for _,m in results_df.iterrows():
+            if str(m['1팀득점']).isdigit() and str(m['2팀득점']).isdigit():
+                st.markdown(f"**⚽ 경기 {m['경기']} | {m['조']}조**")
+                st.write(f"{m['1팀']} {m['1팀득점']} : {m['2팀득점']} {m['2팀']}")
+                st.write(f"📌 결과: {m['결과']}  |  📅 {m['경기일자']}")
+                st.markdown('---')
+    with tabs[1]:
+        for _,m in results_df.iterrows():
+            if not(str(m['1팀득점']).isdigit() and str(m['2팀득점']).isdigit()):
+                st.markdown(f"**⚽ 경기 {m['경기']} | {m['조']}조**")
+                st.write(f"{m['1팀']} vs {m['2팀']}")
+                st.write(f"📅 예정일자: {m['경기일자']}")
+                st.markdown('---')
+
 # 득점자
 elif page == '득점자':
     st.subheader('다득점자')
     df = scorers_df.sort_values('득점',ascending=False)
-    maxg = df['득점'].max()
+    m = df['득점'].max()
     for _,r in df.iterrows():
         if r['득점']>=2:
-            medal = 'gold' if r['득점']==maxg else 'silver' if r['득점']==maxg-1 else 'bronze' if r['득점']==maxg-2 else ''
+            medal = 'gold' if r['득점']==m else 'silver' if r['득점']==m-1 else 'bronze' if r['득점']==m-2 else ''
             st.markdown(scorer_card(r['이름'],r['소속'],r['득점'],medal),unsafe_allow_html=True)
 
 # 반별 통계
@@ -112,12 +128,11 @@ elif page == '반별 통계':
         st.error(f"🛡️ 실점: {ga}실점")
         st.info(f"🧮 골득실: {gd}점")
         st.info(f"🏅 승점: {pts}점")
-        # 해당 반 득점자
         sub = scorers_df[scorers_df['소속']==sel]
         if not sub.empty:
-            m = sub['득점'].max()
+            mm = sub['득점'].max()
             for _,r in sub.sort_values('득점',ascending=False).iterrows():
-                medal='gold' if r['득점']==m else 'silver' if r['득점']==m-1 else 'bronze' if r['득점']==m-2 else ''
+                medal = 'gold' if r['득점']==mm else 'silver' if r['득점']==mm-1 else 'bronze' if r['득점']==mm-2 else ''
                 st.markdown(scorer_card(r['이름'],r['소속'],r['득점'],medal),unsafe_allow_html=True)
         else:
             st.warning('⚠️ 해당 반의 득점자 정보가 없습니다.')
@@ -125,9 +140,9 @@ elif page == '반별 통계':
 # 경기영상
 elif page == '경기영상':
     st.subheader('🎥 경기 영상')
-    for title,link in video_links.items():
-        st.markdown(f"<div class='video-card'><p class='video-title'>▶ {title} 경기 영상</p></div>",unsafe_allow_html=True)
-        st.video(link)
+    for t,l in video_links.items():
+        st.markdown(f"<div class='video-card'><p class='video-title'>▶ {t} 경기 영상</p></div>",unsafe_allow_html=True)
+        st.video(l)
 
 # 조별결과
 elif page == '조별결과':
