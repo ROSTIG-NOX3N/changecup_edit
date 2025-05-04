@@ -3,4 +3,4 @@ import streamlit as st
 
 img = Image.open('images/대진표.png')
 
-st.image(img)
+st.image(img, use_column_width=True)
