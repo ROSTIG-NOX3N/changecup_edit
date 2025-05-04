@@ -252,3 +252,22 @@ elif page=='대진표':
     with st.spinner('이미지를 불러오는 중입니다...'):
         show_bracket('bracket.png')
     st.caption('※ 이미지가 크면 좌우로 스크롤하여 확인하세요.')
+
+elif option == "조별결과":
+    st.markdown("### 🏆 조별 결과")
+    class_stats_df["승점"] = class_stats_df["승"] * 3 + class_stats_df["무"]
+    class_stats_df["골득실"] = class_stats_df["득점"] - class_stats_df["실점"]
+
+    def highlight_qualified(row):
+        return ['background-color: green'] * len(row) if row["학반"] == "2학년 2반" else [''] * len(row)
+
+    for group, group_data in class_stats_df.groupby("조"):
+        st.markdown(f"#### 조 {group}")
+        sorted_group = group_data.sort_values(
+            by=["승점", "골득실", "득점", "실점"],
+            ascending=[False, False, False, True]
+        )
+        st.dataframe(
+            sorted_group[["학반", "승", "무", "패", "득점", "실점", "승점", "골득실"]]
+            .style.apply(highlight_qualified, axis=1)
+        )
